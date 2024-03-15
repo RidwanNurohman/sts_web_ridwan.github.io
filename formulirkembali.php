@@ -1,28 +1,4 @@
-<?php
-    session_start();
-    include "database.php";
-
-    // Handle form submission
-    if(isset($_POST['pinjam'])) {
-        $no_identitas = $_SESSION['no_identitas'];
-        $kode_barang = $_POST['kode_barang'];
-        $jumlah = $_POST['jumlah'];
-        $keperluan = $_POST['keperluan'];
-        $status = 'Dikembalikan';
-        $tgl_kembali = date('Y-m-d H:i:s');
-
-        // Insert data into peminjaman table
-        $query = "INSERT INTO pengembalian (no_identitas, kode_barang, jumlah, keperluan, status, tgl_kembali) 
-                  VALUES ('$no_identitas', '$kode_barang', $jumlah, '$keperluan', '$status', '$tgl_kembali')";
-        mysqli_query($koneksi, $query);
-
-        // Update jumlah barang in the barang table
-        $update_query = "UPDATE barang SET jumlah = jumlah + $jumlah WHERE kode_brg = '$kode_barang'";
-        mysqli_query($koneksi, $update_query);
-    }
-?>
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -34,86 +10,137 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
     integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
-  <title>Pengembalian</title>
+  <title>Formulir Pengembalian Barang</title>
 </head>
 
 <body>
-<div id="content-wrapper" class="d-flex flex-column">
+  <?php
+  session_start();
+  if ($_SESSION['status'] <> "login") {
+    header("location:login.php?msg=belum_login");
+  } else {
+    require('navbar2.php');
+  }
+  ?>
 
-            <div id="content">
+  <!-- Optional JavaScript; choose one of the two! -->
 
+  <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+    crossorigin="anonymous"></script>
 
-                <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Pengembalian Barang</h1>
-                    <form class="user" method="POST" action="formulirkembali.php">
-                    <div class="form-group">
-                    <?php
-        // $user_data = checkLogin($_SESSION['username']);
-        // $no_identitas = $user_data[0]['no_identitas']; // Sesuaikan dengan struktur data yang sesuai
-    ?>
-    <input type="hidden" class="form-control form-control-user" placeholder="No Identitas" name="no_identitas" value="<?php echo $no_identitas ?>">
-</div>
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+    -->
 
-    <div class="form-group">
-        <label for="kode_barang">Kode Barang</label>
-        <select class="form-control form-control-user" name="kode_barang">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+      </div>
+      <div class="col-md-4">
+        <h2 align="center">Pengembalian Barang</h2>
+        <form method="post" action="proses_pengembalian.php" id="form_pengembalian" onsubmit="return cekJumlah()">
+          <label for="kode_barang">Pilih ID Barang:</label>
+          <select class="form-control" name="kode_barang" id="kode_barang" onchange="getBarangDetails()">
             <?php
-                $barang_data = tampildata1('barang');
-                foreach ($barang_data as $barang) {
-                    echo "<option value=\"$barang[kode_brg]\">$barang[nama_brg]</option>";
-                }
+            require_once('database.php');
+            $result = getAllBarang();
+            if ($result->num_rows > 0) {
+              while ($row = $result->fetch_assoc()) {
+                echo "<option value='" . $row["kode_brg"] . "'>" . $row["id"] . "</option>";
+              }
+            } else {
+              echo "<option value=''>Tidak ada barang tersedia</option>";
+            }
             ?>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="jumlah">Jumlah dipinjam</label>
-        <input type="number" class="form-control form-control-user" placeholder="Jumlah" name="jumlah">
-    </div>
-    <div class="form-group">
-        <label for="keperluan">Keperluan</label>
-        <input type="text" class="form-control form-control-user" placeholder="Keperluan" name="keperluan">
-    </div>
-    <div class="form-group">
-        <input type="hidden" class="form-control form-control-user" placeholder="Status" name="status" value="">
-    </div>
-    <div class="form-group">
-        <input type="hidden" class="form-control form-control-user" placeholder="Tanggal Kembali" name="tgl_kembali">
-    </div>
-    <input type="submit" name="pinjam" class="btn btn-dark btn-user btn-block" href="pengembalian2.php">
-    <a type="button" class="btn btn-dark btn-user btn-block" href="pengembalian2.php" name="kembali"
+          </select>
+          <div class="form-group">
+            <label for="kode_brg">Kode Barang:</label>
+            <input type="text" class="form-control" id="kode_brg" name="kode_brg" readonly>
+          </div>
+          <div class="form-group">
+            <label for="nama_brg">Nama Barang:</label>
+            <input type="text" class="form-control" id="nama_brg" name="nama_brg" readonly>
+          </div>
+          <div class="form-group">
+            <label for="kategori">Kategori:</label>
+            <input type="text" class="form-control" id="kategori" name="kategori" readonly>
+          </div>
+          <div class="form-group">
+            <label for="merk">Merk:</label>
+            <input type="text" class="form-control" id="merk" name="merk" readonly>
+          </div>
+          <div class="form-group">
+            <label for="jumlah_tersedia">Jumlah Tersedia:</label>
+            <input type="text" class="form-control" id="jumlah_tersedia" name="jumlah_tersedia" readonly>
+          </div>
+          <div class="form-group">
+            <label for="login">ID Peminjam:</label>
+            <input type="number" class="form-control" id="login" name="login" required>
+          </div>
+          <div class="form-group">
+            <label for="no_identitas">Nomor Identitas:</label>
+            <input type="number" class="form-control" id="no_identitas" name="no_identitas" required>
+          </div>
+          <div class="form-group">
+            <label for="jumlah">Jumlah:</label>
+            <input type="number" class="form-control" id="jumlah" min="1" name="jumlah" required>
+          </div>
+          <div class="form-group">
+            <label for="keperluan">Keperluan:</label>
+            <input type="text" class="form-control" id="keperluan" name="keperluan" required>
+          </div>
+          <input type="submit" name="pinjam" class="btn btn-primary btn-user btn-block" href="pengembalian2.php">
+          <a type="button" class="btn btn-primary btn-user btn-block" href="peminjaman2.php" name="kembali"
                         value="kembali">Kembali</a>
-</form>
+        </form>
+      </div>
+    </div>
 
-                </div>
+    <script src="database.js"></script>
+    <script>
+      function getBarangDetails() {
+        var kode_barang = document.getElementById("kode_barang").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "detailbarang.php?kode_barang=" + kode_barang, true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            var barang = JSON.parse(xhr.responseText);
+            document.getElementById("kode_brg").value = barang.kode_brg;
+            document.getElementById("nama_brg").value = barang.nama_brg;
+            document.getElementById("kategori").value = barang.kategori;
+            document.getElementById("merk").value = barang.merk;
+            document.getElementById("jumlah_tersedia").value = barang.jumlah;
+          }
+        };
+        xhr.send();
+      }
+    </script>
+    <script>
+      function cekJumlah() {
+        var jumlah_tersedia = parseInt(document.getElementById("jumlah_tersedia").value);
+        var jumlah_dipinjam = parseInt(document.getElementById("jumlah").value);
 
-            </div>
+        if (jumlah_dipinjam <= 0) {
+          alert("Jumlah yang dipinjam harus lebih dari 0.");
+          return false;
+        }
 
-        </div>
+        if (jumlah_dipinjam > jumlah_tersedia) {
+          alert("Jumlah yang dipinjam melebihi jumlah yang tersedia.");
+          return false;
+        }
 
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
-
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="resource/vendor/jquery/jquery.min.js"></script>
-    <script src="resource/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="resource/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="resource/js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="resource/vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="resource/js/demo/chart-area-demo.js"></script>
-    <script src="resource/js/demo/chart-pie-demo.js"></script>
-
-    
-
+        return true;
+      }
+    </script>
 </body>
 
 </html>
