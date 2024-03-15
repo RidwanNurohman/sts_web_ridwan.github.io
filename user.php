@@ -14,6 +14,12 @@ $nomor = 0;
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
     integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <style>
+    /* Custom CSS */
+    #content-wrapper {
+      margin-left: 200px; /* Adjust this value according to your sidebar width */
+    }
+  </style>
 
   <title>Barang</title>
 </head>
@@ -40,9 +46,6 @@ $nomor = 0;
 
 <div id="content">
 
-    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-      
-    </nav>
 
     <div class="container-fluid">
 
@@ -51,7 +54,6 @@ $nomor = 0;
 <div class="card shadow mb-4">
 <div class="card-body">
 <div class="row justify-content-end pr-3">
-<a href="tambahbarang.php"><button type="button" class="btn btn-success">Tambah Barang</button></a>
 </div>
 </div>
 <div class="card-body">
