@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 13 Mar 2024 pada 21.16
+-- Waktu pembuatan: 15 Mar 2024 pada 07.20
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -41,7 +41,8 @@ CREATE TABLE `barang` (
 --
 
 INSERT INTO `barang` (`id`, `kode_brg`, `nama_brg`, `kategori`, `merk`, `jumlah`) VALUES
-(5, 'KB001', 'Handphone', 'Elektronik', 'Asus', 1000);
+(5, 'KB001', 'Handphone', 'Elektronik', 'Asus', 1000),
+(6, 'KB002', 'Laptop', 'Elektronik', 'Lenovo', 800);
 
 -- --------------------------------------------------------
 
@@ -66,7 +67,9 @@ CREATE TABLE `peminjaman` (
 --
 
 INSERT INTO `peminjaman` (`id`, `tgl_pinjam`, `tgl_kembali`, `no_identitas`, `kode_barang`, `jumlah`, `keperluan`, `status`, `id_login`) VALUES
-(27, '2024-03-13', '2024-03-16', '003', 'KB001', 100, 'belajar', 'Dipinjam', 0);
+(29, '2024-03-15', '0000-00-00', '003', 'KB001', 100, 'belajar', 'Dipinjam', 3),
+(30, '2024-03-15', '0000-00-00', '003', 'KB001', 100, 'belajar', 'Dipinjam', 3),
+(33, '2024-03-15', '0000-00-00', '003', 'KB001', 100, 'belajar', 'Dipinjam', 3);
 
 -- --------------------------------------------------------
 
@@ -84,6 +87,13 @@ CREATE TABLE `pengembalian` (
   `status` varchar(255) NOT NULL,
   `id_login` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `pengembalian`
+--
+
+INSERT INTO `pengembalian` (`id`, `tgl_kembali`, `no_identitas`, `kode_barang`, `jumlah`, `keperluan`, `status`, `id_login`) VALUES
+(20, '2024-03-15', '003', 'KB001', 300, 'belajar', 'Dikembalikan', 3);
 
 -- --------------------------------------------------------
 
@@ -146,19 +156,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT untuk tabel `barang`
 --
 ALTER TABLE `barang`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT untuk tabel `pengembalian`
 --
 ALTER TABLE `pengembalian`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT untuk tabel `user`
