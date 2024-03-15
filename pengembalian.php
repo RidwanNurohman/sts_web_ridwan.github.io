@@ -15,7 +15,12 @@ $nomor = 0;
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
     integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-
+    <style>
+    /* Custom CSS */
+    #content-wrapper {
+      margin-left: 200px; /* Adjust this value according to your sidebar width */
+    }
+  </style>
   <title>Pengembalian</title>
 </head>
 
@@ -58,12 +63,14 @@ $nomor = 0;
     <thead>
         <tr>
             <th>No</th>
+            <th>ID</th>
             <th>No Identitas</th>
             <th>Kode Barang</th>
             <th>Jumlah</th>
             <th>Keperluan</th>
             <th>Status</th>
             <th>Tanggal Kembali</th>
+            <th>ID Login</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -72,12 +79,14 @@ $nomor = 0;
         <?php $nomor++; ?>
         <tr>
             <th scope="row"><?php echo "$nomor"; ?></th>
+            <td><?php echo "$pengembalian[id]";?></td>
             <td><?php echo "$pengembalian[no_identitas]";?></td>
             <td><?php echo "$pengembalian[kode_barang]";?></td>
             <td><?php echo "$pengembalian[jumlah]";?></td>
             <td><?php echo "$pengembalian[keperluan]";?></td>
             <td><?php echo "$pengembalian[status]";?></td>
             <td><?php echo "$pengembalian[tgl_kembali]";?></td>
+            <td><?php echo "$pengembalian[id_login]";?></td>
             <td>
                 <?php
                     echo "
@@ -107,7 +116,7 @@ $nomor = 0;
 <script>
 function printData() {
 var printWindow = window.open('', '_blank');
-printWindow.document.write('<html><head><title>Data Peminjaman</title></head><body>');
+printWindow.document.write('<html><head><title>Data Pengembalian</title></head><body>');
 printWindow.document.write('<style>table {border-collapse: collapse;width: 100%;}th, td {border: 1px solid #ddd;padding: 8px;text-align: left;}th {background-color: #f2f2f2;}</style>');
 printWindow.document.write(document.getElementById('dataTable').outerHTML);
 printWindow.document.write('</body></html>');
