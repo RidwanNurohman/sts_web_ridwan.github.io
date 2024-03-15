@@ -15,6 +15,12 @@ $nomor = 0;
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
     integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <style>
+    /* Custom CSS */
+    #content-wrapper {
+      margin-left: 200px; /* Adjust this value according to your sidebar width */
+    }
+  </style>
 
   <title>Pengembalian</title>
 </head>
@@ -63,6 +69,7 @@ $nomor = 0;
             <th>Keperluan</th>
             <th>Status</th>
             <th>Tanggal Kembali</th>
+            <th>ID Login</th>
         </tr>
     </thead>
     <tbody>
@@ -76,6 +83,7 @@ $nomor = 0;
             <td><?php echo "$pengembalian[keperluan]";?></td>
             <td><?php echo "$pengembalian[status]";?></td>
             <td><?php echo "$pengembalian[tgl_kembali]";?></td>
+            <td><?php echo "$pengembalian[id_login]";?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
