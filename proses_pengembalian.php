@@ -1,57 +1,36 @@
 <?php
 require_once('database.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    $kode_barang = $_POST['kode_barang'];
-    $tgl_pinjam = $_POST['tgl_pinjam'];
-    $tgl_kembali = $_POST['tgl_kembali'];
-    $no_identitas = $_POST['no_identitas'];
-    $jumlah = $_POST['jumlah'];
-    $keperluan = $_POST['keperluan'];
-    $status = $_POST['status']; 
-    $id_login = $_POST['id_login'];
+$id_barang = $_POST['kode_brg'];
+$no_identitas = $_POST['no_identitas'];
+$id_login = $_POST['login'];
+$jumlah = $_POST['jumlah'];
+$keperluan = $_POST['keperluan'];
 
-    
-    $cek_stok_query = "SELECT jumlah FROM barang WHERE kode_brg = '$kode_barang'";
-    $cek_stok_result = $koneksi->query($cek_stok_query);
+$barang = barang($id_barang);
 
-    if ($cek_stok_result->num_rows > 0) {
-        $row = $cek_stok_result->fetch_assoc();
-        $stok_tersedia = $row['jumlah'];
+if ($barang !== null) {
+    $jumlah_tersedia = $barang['jumlah'];
 
-        if ($jumlah <= $stok_tersedia) {
-            
-            $stok_baru = $stok_tersedia + $jumlah;
-            $update_stok_query = "UPDATE barang SET jumlah = '$stok_baru' WHERE kode_brg = '$kode_barang'";
-            $update_stok_result = $koneksi->query($update_stok_query);
+    if ($jumlah_tersedia >= $jumlah) {
+        $jumlah_tersedia_baru = $jumlah_tersedia + $jumlah;
+        $koneksi->query("UPDATE barang SET jumlah = $jumlah_tersedia_baru WHERE kode_brg = '$id_barang'");
 
-            if ($update_stok_result) {
-                
-                $insert_query = "INSERT INTO pengembalian (kode_barang, tgl_pinjam, tgl_kembali, no_identitas, jumlah, keperluan, status, id_login) VALUES ('$kode_barang', '$tgl_pinjam', '$tgl_kembali', '$no_identitas', '$jumlah', '$keperluan', '$status', '$id_login')";
-                $insert_result = $koneksi->query($insert_query);
+        $sql = "INSERT INTO pengembalian (`tgl_kembali`, `no_identitas`, `kode_barang`, `jumlah`, `keperluan`, `status`, `id_login`)
+                VALUES (NOW(), '$no_identitas', '$id_barang', '$jumlah', '$keperluan', 'Dikembalikan', '$id_login')";
 
-                if ($insert_result) {
-                    echo "<script>alert('Berhasil kembalikan barang');</script>";
-                    header("location:pengembalian2.php");
-                } else {
-                    echo "<script>alert('Gagal kembalikan barang');</script>";
-                    header("location:formulirkembali.php");
-                }
-            } else {
-                echo "<script>alert('kode barang salah');</script>";
-                header("location:formulirkembali.php");
-            }
+        if ($koneksi->query($sql) === TRUE) {
+            header ("location:pengembalian2.php");
         } else {
-            echo "<script>alert('jumlah barang invalid');</script>";
-            header("location:formulirkembali.php");
+            echo "Error: " . $sql . "<br>" . $koneksi->error;
         }
     } else {
-        echo "<script>alert('Barang tidak ditemukan');</script>";
-        header("location:formulirkembali.php");
+        echo "Jumlah yang dipinjam melebihi jumlah yang tersedia.";
+        
     }
-
-    // Tutup koneksi
-    $conn->close();
+} else {
+    echo "Barang tidak ditemukan.";
 }
+
+$koneksi->close();
 ?>
