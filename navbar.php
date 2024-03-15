@@ -1,32 +1,80 @@
 <?php
 require_once('database.php')
 ?>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
-      aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="#">Peminjaman</a>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  margin: 0;
+  font-family: "Lato", sans-serif;
+}
 
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item">
-          <a class="nav-link" href="home.php">Dashboard</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="barang.php">Barang</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="peminjaman.php">Peminjaman <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="pengembalian.php">Pengembalian <span class="sr-only"></span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="user.php">User <span class="sr-only"></span></a>
-        </li>
-      <form class="form-inline my-2 my-lg-0">
-        <a class="btn btn-outline-success my-2 my-sm-0" href="logout.php" role="button">Logout</a>
-      </form>
-    </div>
-  </nav>
+.sidebar {
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+}
+ 
+.sidebar a.active {
+  background-color: black;
+  color: white;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+div.content {
+  margin-left: 200px;
+  padding: 1px 16px;
+  height: 1000px;
+}
+
+@media screen and (max-width: 700px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {float: left;}
+  div.content {margin-left: 0;}
+}
+
+@media screen and (max-width: 400px) {
+  .sidebar a {
+    text-align: center;
+    float: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <a class="active" href="home.php">Dashboard</a>
+  <a href="barang.php">Barang</a>
+  <a href="peminjaman.php">Peminjaman</a>
+  <a href="pengembalian.php">Pengembalian</a>
+  <a href="banyakpinjam.php">Banyak Dipinjam</a>
+  <a href="user.php">User</a>
+  <a href="logout.php" type="button" class="btn btn-outline-danger">Log Out</a>
+</div>
+
+
+
+</body>
+</html>
