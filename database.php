@@ -121,5 +121,40 @@ function kembalibarang($id, $tgl_pinjam, $tgl_kembali, $no_identitas, $kode_bara
     }
 }
 
+function populer($tablename)
+{
+    global $koneksi;
+    $sql = mysqli_query($koneksi, "SELECT peminjaman.kode_barang, barang.nama_brg, barang.merk, SUM(peminjaman.jumlah) AS total_dipinjam
+    FROM peminjaman
+    JOIN barang ON peminjaman.kode_barang = barang.kode_brg
+    GROUP BY peminjaman.kode_barang, barang.nama_brg, barang.merk
+    ORDER BY total_dipinjam DESC
+    LIMIT 5;
+    ");
+    $rows = [];
+    while ($row = mysqli_fetch_assoc($sql)) {
+        $rows[] = $row;
+    }
+    return $rows;
+}
 
+function getAllBarang()
+{
+    global $koneksi;
+    $sql = "SELECT id, kode_brg, nama_brg, jumlah FROM barang";
+    return $koneksi->query($sql);
+}
+
+function barang($id_barang)
+{
+    global $koneksi;
+    $sql = "SELECT * FROM barang WHERE id = '$id_barang' OR jumlah";
+    $result = $koneksi->query($sql);
+    if ($result->num_rows > 0) {
+        $barang = $result->fetch_assoc();
+        return $barang;
+    } else {
+        return array("error" => "Barang tidak ditemukan atau stok habis");
+    }
+}
 ?>
