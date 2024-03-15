@@ -45,7 +45,9 @@ if(isset($_SESSION['error'])) {
  
     <style>
     body {
-      background-color: gray; /* Hitam */
+      background-image: url('sekolahbn2.jpg'); /* Tambahkan lokasi gambar background di sini */
+      background-size: cover; /* Untuk memastikan gambar background menutupi seluruh area */
+      background-position: center; /* Untuk memposisikan gambar background ke tengah */
       color: black; /* Warna teks putih untuk kontras */
     }
   </style>
